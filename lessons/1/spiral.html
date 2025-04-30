@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>NS: Lesson 1:  The Spiral</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/js/jquery/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="/js/jquery/jquery-simple-tree-table.min.js" ></script>
+
+<script src="/js/bootstrap/bootstrap.bundle.min.js" ></script>
+<link rel="stylesheet"  href="/css/bootstrap/bootstrap.min.css" >
+<link rel="stylesheet"  href="/css/bootstrap/bootstrap.materia.css" >
+<link rel="stylesheet"  href="/css/bootstrap/bootstrap-icons.css" >
+
+<script src="/js/auto-resize-textarea.js" ></script>
+
+<script src="/js/datatables/datatables.min.js" ></script>
+<script src="/js/datatables/datatables_add_filter.js" ></script>
+<link rel="stylesheet"  href="/css/datatables.min.css" >
+<link rel="stylesheet"  href="/css/bootstrap/dataTables.bootstrap5.min.css" >
+
+<script src="/js/gridstack/gridstack-all.js" ></script>
+<script src="/js/gridstack/gridstack-poly.js" ></script>
+<link rel="stylesheet"  href="/css/gridstack/gridstack.min.css" >
+
+<script src="/js/goldenlayout/goldenlayout.min.js"></script>
+<link rel="stylesheet" href="/css/goldenlayout/goldenlayout-base.css" >
+<link rel="stylesheet" href="/css/goldenlayout/goldenlayout-dark-theme.css" >
+
+<!-- Last style for any overwrites we want -->
+<link rel="stylesheet"  href="/css/shockwave.css" >
+
+
+<!-- Include GL Matrix from cloudflare-->
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+    integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+    crossorigin="anonymous"
+    defer>
+</script>
+<script src="js/webgl.js" type="module"></script>
+
+<script>
+    function resizeCanvas() {
+        var canvs = document.getElementById("glcanvas");
+        var edge = window.innerHeight
+        if (window.innerWidth < window.innerHeight) {
+            edge = window.innerWidth
+        } 
+        // Use only 80% of the screen (for now, add controls later, likely in the golden layout, when we get there.
+        edge = edge * 0.8
+        canvs.width  = edge;
+        canvs.height = edge;
+    }
+</script>
+
+</head>
+<body background onload="resizeCanvas()">
+    <div class="container text-center">
+        <canvas id="glcanvas" height="240" width="240">
+        </canvas>
+    </div>
+</body>
+</html>
