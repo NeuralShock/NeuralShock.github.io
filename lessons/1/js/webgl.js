@@ -58,7 +58,7 @@ function main() {
     let then = 0;
     function render(now) {
         now *= 0.001;
-        deltaTime = now -then;
+        deltaTime = now - then;
         then = now;
         drawScene(gl, programInfo, buffers, squareRotation);
         squareRotation += deltaTime;

@@ -37,26 +37,37 @@
     crossorigin="anonymous"
     defer>
 </script>
-<script src="js/webgl.js" type="module"></script>
+<script src="js/webgl.js" type="module">
+</script>
 
 <script>
     function resizeCanvas() {
-        var canvs = document.getElementById("glcanvas");
-        var edge = window.innerHeight
+        var canvs    = document.getElementById("glcanvas");
+        var canvsdiv = document.getElementById("canvas-div");
+        var edge     = window.innerHeight
         if (window.innerWidth < window.innerHeight) {
             edge = window.innerWidth
         } 
         // Use only 80% of the screen (for now, add controls later, likely in the golden layout, when we get there.
-        edge = edge * 0.8
-        canvs.width  = edge;
-        canvs.height = edge;
+        edge = edge * 0.8;
+        console.log(edge)
+        canvs.width     = edge;
+        canvs.height    = edge;
+        // TODO:  Update the transforms to match...
+        canvsdiv.width  = edge;
+        canvsdiv.height = edge;
+        canvsdiv.min_width  = edge;
+        canvsdiv.min_height = edge;
+        canvsdiv.max_width  = edge;
+        canvsdiv.max_height = edge;
+
     }
 </script>
 
 </head>
-<body background onload="resizeCanvas()">
-    <div class="container text-center">
-        <canvas id="glcanvas" height="240" width="240">
+<body background onload="resizeCanvas()"  onresize="resizeCanvas()">
+    <div id="canvas-div" class="spiral-center">
+        <canvas id="glcanvas" height="480" width="480">
         </canvas>
     </div>
 </body>
