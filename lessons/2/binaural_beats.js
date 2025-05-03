@@ -1,5 +1,6 @@
 
-var audioContext
+var audio_context
+var channel_merger
 // TODO:  make enum for left/right, mintor but will be useful in future iterations.
 var oscillator_left
 var gain_left
@@ -10,35 +11,38 @@ var is_playing   = false
 
 function init_binaural_beats() {
     // Create the context, this is the output node fot he audio node
-    audioContext = new AudioContext()
+    audio_context = new AudioContext()
+
+    channel_merger = audio_context.createChannelMerger(2)
+    channel_merger.connect(audio_context.destination)
 
     /**********************************
      * Left
      */
-    oscillator_left  = audioContext.createOscillator();
+    oscillator_left  = audio_context.createOscillator();
     oscillator_left.wave='sine';            // Create a sine wave
     oscillator_left.frequency.value=88;          // 440 = 'A'
 
-    gain_left        = audioContext.createGain();
-    gain_left.gain.value  = 0.25
+    gain_left        = audio_context.createGain();
+    gain_left.gain.value  = 1.0
+    gain_left.connect(channel_merger, 0, 0)
 
     // Wire up the sound graph.
     oscillator_left.connect(gain_left);
-    gain_left.connect(audioContext.destination)
 
     /**********************************
      * Right
      */
-    oscillator_right  = audioContext.createOscillator();
+    oscillator_right  = audio_context.createOscillator();
     oscillator_right.wave='sine';            // Create a sine wave
-    oscillator_right.frequency.value=89;          // 440 = 'A'
+    oscillator_right.frequency.value=96;          // 440 = 'A'
 
-    gain_right = audioContext.createGain();
+    gain_right = audio_context.createGain();
     gain_right.gain.value = 1.0;
 
     // Wire up the sound graph.
     oscillator_right.connect(gain_right);
-    gain_right.connect(audioContext.destination)
+    gain_right.connect(channel_merger, 0, 1)
 }  
 
 function binaural_beats_play() {
