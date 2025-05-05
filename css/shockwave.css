@@ -195,3 +195,21 @@ input[type=number] {
   font-size: 10px;
 }
 
+
+.tts_textarea {
+  /* flex: 1; */
+  width: 100%;
+  max-width: 100%;
+}
+
+.tts_voices {
+  /* flex: 1; */
+  width: 100%;
+  max-width: 100%;
+}
+
+
+.wrapper{display:table; width:100%; }
+.left{width:5%; background:#cccccc; display:table-cell;}
+.main{width:95%; background: gray; display:inline; }
+.main > textarea{width:inherit;}
