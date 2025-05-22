@@ -1,7 +1,7 @@
 
 var audio_context
 var channel_merger
-// TODO:  make enum for left/right, mintor but will be useful in future iterations.
+// TODO:  make enum for left/right, but will be useful in future iterations.
 var oscillator_left
 var gain_left
 var oscillator_right
@@ -21,7 +21,7 @@ function init_binaural_beats() {
      */
     oscillator_left  = audio_context.createOscillator();
     oscillator_left.wave='sine';            // Create a sine wave
-    oscillator_left.frequency.value=88;          // 440 = 'A'
+    oscillator_left.frequency.value=88;     // 440 = 'A'
 
     gain_left        = audio_context.createGain();
     gain_left.gain.value  = 1.0
@@ -35,7 +35,7 @@ function init_binaural_beats() {
      */
     oscillator_right  = audio_context.createOscillator();
     oscillator_right.wave='sine';            // Create a sine wave
-    oscillator_right.frequency.value=96;          // 440 = 'A'
+    oscillator_right.frequency.value=96;     // 440 = 'A'
 
     gain_right = audio_context.createGain();
     gain_right.gain.value = 1.0;

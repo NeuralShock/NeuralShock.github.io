@@ -1,10 +1,17 @@
+var glVariables = {
+    numPointsPerSpin: 100,
+    numSpins: 9,
+    numPoints: 400
+}
+
+
 import { initBuffers } from "./init-buffers.js";
 import { drawScene }   from "./draw-scene.js";
 
 main();
 
-
-function main() {
+function main() {    
+    glVariables.numPoints=glVariables.numPointsPerSpin*glVariables.numSpins;
     let squareRotation = 0.0;
     let deltaTime = 0;
 
@@ -41,7 +48,7 @@ function main() {
         }
         `;
 
-    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+    const shaderProgram = initShaderProgram(gl, vsSource, fsSource, glVariables);
 
     const programInfo = {
             program: shaderProgram,
@@ -54,13 +61,13 @@ function main() {
                 modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
             },
         };
-    const buffers = initBuffers(gl);
+    const buffers = initBuffers(gl,glVariables);
     let then = 0;
     function render(now) {
-        now *= 0.001;
+        now *= 0.02;
         deltaTime = now - then;
         then = now;
-        drawScene(gl, programInfo, buffers, squareRotation);
+        drawScene(gl, programInfo, buffers, squareRotation, glVariables);
         squareRotation += deltaTime;
         requestAnimationFrame(render);
     }

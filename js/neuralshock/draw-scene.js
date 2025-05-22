@@ -1,6 +1,6 @@
 
 
-function drawScene(gl, programInfo, buffers, squareRotation) {
+function drawScene(gl, programInfo, buffers, squareRotation, vars) {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clearDepth(1.0);
@@ -51,12 +51,9 @@ function drawScene(gl, programInfo, buffers, squareRotation) {
     {
         const offset = 0;
 
-        let numPointsPerSpin=100;
-        let numSpins=4;
-        let numPoints= numSpins * numPointsPerSpin;
     
 
-        gl.drawArrays(gl.LINE_STRIP, offset, numPoints);
+        gl.drawArrays(gl.LINE_STRIP, offset, vars.numPoints);
         //const vertexCount = 4;      // This needs to be attached to the triangel strip as a whole.
         //gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
     }

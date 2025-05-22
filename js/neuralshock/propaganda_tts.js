@@ -60,6 +60,7 @@ function tts_play() {
 
     const utterThis = new SpeechSynthesisUtterance(document.getElementById("tts_text").value);
     utterThis.voice = voices[voiceSelect.value];
+    utterThis.rate=0.5; // TODO:  Make this configurable.
     utterThis.addEventListener("end", (event) => { 
             if (document.getElementById("tts_loop_checkbox").checked) {
                 tts_play();

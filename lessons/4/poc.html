@@ -1,0 +1,216 @@
+<html>
+    <head>
+        <title>NS: Lesson 4:  PoC</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="/js/jquery/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="/js/jquery/jquery-simple-tree-table.min.js" ></script>
+        
+        <script src="/js/bootstrap/bootstrap.bundle.min.js" ></script>
+        <link rel="stylesheet"  href="/css/bootstrap/bootstrap.min.css" >
+        <link rel="stylesheet"  href="/css/bootstrap/bootstrap.materia.css" >
+        <link rel="stylesheet"  href="/css/bootstrap/bootstrap-icons.css" >
+        
+        <script src="/js/auto-resize-textarea.js" ></script>
+        
+        <script src="/js/datatables/datatables.min.js" ></script>
+        <script src="/js/datatables/datatables_add_filter.js" ></script>
+        <link rel="stylesheet"  href="/css/datatables.min.css" >
+        <link rel="stylesheet"  href="/css/bootstrap/dataTables.bootstrap5.min.css" >
+        
+        <script src="/js/gridstack/gridstack-all.js" ></script>
+        <script src="/js/gridstack/gridstack-poly.js" ></script>
+        <link rel="stylesheet"  href="/css/gridstack/gridstack.min.css" >
+        
+        <script src="/js/goldenlayout/goldenlayout.min.js"></script>
+        <link rel="stylesheet" href="/css/goldenlayout/goldenlayout-base.css" >
+        <link rel="stylesheet" href="/css/goldenlayout/goldenlayout-dark-theme.css" >
+        
+        <!-- Last style for any overwrites we want -->
+        <link rel="stylesheet"  href="/css/shockwave.css" >     
+
+        <!-- Include GL Matrix from cloudflare-->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+            integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+            crossorigin="anonymous"
+            defer>
+        </script>
+            <script src="/js/neuralshock/webgl.js" type="module">
+        </script>
+
+        <!--Where the code for binaural beats.-->
+        <script src="/js/neuralshock/binaural_beats.js"></script>
+
+
+        <script> 
+            function load() {
+                layout_config = {
+                    settings: {
+                        popoutWholeStack: false,
+                        showMaximiseIcon: false,
+                        showPopoutIcon:false
+                    },
+                    content: [{
+                        type:"row",
+                        content: [{
+                            type:"stack",
+                            width: 30,
+                            content: [{
+                                type:"component",
+                                componentName: "Binaural",
+                                isClosable: false
+                            },{
+                                type:"component",
+                                componentName: "SpiralControls",
+                                isClosable: false,
+                            },{
+                                type:"component",
+                                componentName: "Voice",
+                                isClosable: false,                
+                            }]},
+                            {
+                                type:"component",
+                                componentName: "Spiral",
+                                isClosable: false
+                            }]
+                        }]
+                    }
+            var golden_layout = new GoldenLayout(layout_config);
+            golden_layout.registerComponent ('Binaural',
+            function (container, componentState) {
+                container.getElement().append(document.getElementById('binaural'));
+            })
+            golden_layout.registerComponent ('Voice',
+            function (container, componentState) {
+                container.getElement().append(document.getElementById('voice'));
+            })
+            golden_layout.registerComponent ('SpiralControls',
+            function (container, componentState) {
+                container.getElement().append(document.getElementById('spiralcontrols'));
+            })
+            golden_layout.registerComponent ('Spiral',
+            function (container, componentState) {
+                container.getElement().append(document.getElementById('spiral'));
+            })
+            golden_layout.init()
+            init_binaural_beats()
+            resizeCanvas()
+        }
+        </script>
+
+        <script>
+            function resizeCanvas() {
+                var canvs    = document.getElementById("glcanvas");
+                var canvsdiv = document.getElementById("spiral");
+                var edge     = window.innerHeight
+                if (window.innerWidth < window.innerHeight) {
+                    edge = window.innerWidth
+                } 
+                // Use only 80% of the screen (for now, add controls later, likely in the golden layout, when we get there.
+                edge = edge * 0.8;
+                console.log(edge)
+                canvs.width     = edge;
+                canvs.height    = edge;
+                // TODO:  Update the transforms to match...
+                canvsdiv.width  = edge;
+                canvsdiv.height = edge;
+                canvsdiv.min_width  = edge;
+                canvsdiv.min_height = edge;
+                canvsdiv.max_width  = edge;
+                canvsdiv.max_height = edge;
+            }
+        </script>
+    </head>
+
+    <body background onload="load()"  onresize="resizeCanvas()">
+        <div id="spiralcontrols" class="notepad z-depth-1">
+            WIP    
+        </div>
+
+        <div id="binaural" class="notepad z-depth-1">
+            <table id="lessons_table" class="table table-striped table-notebook" width="100%">
+                <thead>
+                    <tr>
+                        <td valign="center" colspan="3">
+                            <button id="binaural_play_button" type="button" onclick="binaural_beats_play()" >Play</button>
+                            <button id="binaural_stop_button" type="button" onclick="binaural_beats_stop()" >Stop</button>
+                        </td>
+                    </tr>
+                    <tr><td valign="center">Side</td></td><td>Frequency</td><td>Amplitude</td></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td valign="left" >Left</td>
+                        <td ><input type="number" id="left_frequency" name="left_frequency" value="88" min="10" max="44144" onchange="binaural_beats_set_left_frequency(this)"></td>
+                        <td ><input type="number" id="left_gain" name="left_gain" value="1" min="0" max="1" step="0.01"  onchange="binaural_beats_set_left_gain(this)"></td>
+                    </tr>
+                    <tr>
+                        <td valign="left" >Right</td>
+                        <td ><input type="number" id="right_frequency" name="right_frequency" value="96" min="10" max="44144" onchange="binaural_beats_set_right_frequency(this)"></td>
+                        <td ><input type="number" id="left_gain" name="left_gain" value="1" min="0" max="1" step="0.01"  onchange="binaural_beats_set_left_gain(this)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="voice" class="notepad z-depth-1">
+            <form>
+                <table id="lessons_table" class="table table-striped table-notebook" width="100%">
+                    <tbody>
+                        <tr>
+                            <td valign="center" colspan="2">
+                                <button id="tts_play_button" type="button" onclick="tts_play()" >Play</button>
+                                <input type="checkbox" id="tts_loop_checkbox"  checked="checked">Loop</checkbox>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="left" >Voice</td>
+                            <td valign="left" >
+                                <select class="tts_voices" id="voiceSelect" name="voiceSelect">
+s                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="left" >Message</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="wrapper">
+                                    <div class="left"></div>
+                                    <div class="main">
+                                      <textarea width="100%" rows="10" id="tts_text" name="tts_text">
+Now, in a moment I am going to count down from ten to one, and when I get to one you will have relaxed into a deep satisfying trance. But before that you can move every part of your body as you become loose and floppy and relaxed.	
+Now take a deep breath and relax it. Just let it all flow out... ahhhhh. That's right. Now tense up your whole body, and then let go again... really relax... and feel how good that is...	
+TEN... focus your attention on your feet ... think about your feet... think about letting your feet and toes and ankles relax and get loose.
+NINE... Now relax all the muscles in your legs... in you calves, your knees your thighs... very relaxed... feel those legs getting heavy and heavier...		
+EIGHT... now feel that relaxation spreading into your body... your chest....		
+SEVEN... and now feel that relaxation in your shoulders... spreading all the way down your arms... down to you hands... your fingers... and those arms feel so heavy... so relaxed... it is as if they belong to someone else...		
+SIX... and now allow your neck to relax... and become aware of your face relaxing... your cheeks... your jaw... your lips ...		
+FIVE... let your eyes relax... your eyebrows...your forehead...		
+FOUR... and everything feels loose and heavy... as if you arms and legs were made of stone... totally relaxed... you can feel the weight pressing down... and you just can't move those arms and legs now... and you can enjoy this feeling of total relaxation... letting go... and the more you relax the more you can relax...		
+THREE... and as your mind drifts off you feel a wave of relaxation traveling down your body ... down and down... from the top of your head... relaxing your face... relaxing your neck... your shoulders your body... spreading... down and down... gently and easily... feel your body sinking down... safe and warm and secure...		
+TWO... and each soft gentle breath out... is relaxing you more... and that relaxing means you can relax deeper and deeper now... letting go... drifting away... nothing matters... enjoying that that lovely feeling...		
+ONE... and totally relaxed now... totally at ease... and your mind can drift away to a place... far, far away.... a place where you feel relaxed... where you feel comfortable... always... and think of what the place is like... what other places there might be that you make you feel comfortable... maybe a beach at twilight... or a favorite chair... or snuggled warm in bed on a stormy night... or maybe floating in warm water... allow your mind to drift over these things and other things... whatever feels right for you... as you drift ever deeper... enjoying the feeling ... nothing matters... nothing is important... just being in the moment... let your mind empty...
+
+Learn more, always! Challenge yourself to continue to learn.
+Play with all new concepts to understand them better.
+Focus on what you want to accomplish.
+Obey your inner voice and achieve your goals.
+Embrace Chaos, in the Entropy of everything discover Patterns of Order.
+                                    </textarea>g
+                                    </div>
+                                    </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div id="spiral" class="spiral-center">
+            <canvas id="glcanvas" height="480" width="480">
+            </canvas>
+        </div>
+        </body>
+      <script src="/js/neuralshock/propaganda_tts.js"></script>
+</html>
