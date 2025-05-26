@@ -11,6 +11,7 @@ const rateValue = document.querySelector(".rate-value");
 
 let voices = [];
 
+
 function populateVoiceList() {
     voices = synth.getVoices().sort(function (a, b) {
       const aname = a.name.toUpperCase();
@@ -60,7 +61,7 @@ function tts_play() {
 
     const utterThis = new SpeechSynthesisUtterance(document.getElementById("tts_text").value);
     utterThis.voice = voices[voiceSelect.value];
-    utterThis.rate=0.5; // TODO:  Make this configurable.
+    utterThis.rate=document.getElementById("voice_rate").value; // TODO:  Make this configurable.
     utterThis.addEventListener("end", (event) => { 
             if (document.getElementById("tts_loop_checkbox").checked) {
                 tts_play();
@@ -72,17 +73,17 @@ function tts_play() {
 
 function tts_stop() {
     console.log("Stop");
-
+    window.speechSynthesis.cancel();
 }
 
 
-function tts_adjust_rate() {
+function tts_adjust_rate(r) {
     console.log("Rate");
-
+    utterThis.rate=r.value
 }
 
 
-function tts_adjust_pitch() {
+function tts_adjust_pitch(p) {
     console.log("Pitch");
 
 }

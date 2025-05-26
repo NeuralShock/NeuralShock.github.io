@@ -52,14 +52,18 @@
                         showPopoutIcon:false
                     },
                     content: [{
-                        type:"row",
+                        type:"column",
                         content: [{
                             type:"stack",
-                            width: 30,
+                            height: 20,
                             content: [{
                                 type:"component",
-                                componentName: "Binaural",
+                                componentName: "MainControls",
                                 isClosable: false
+                            },{
+                                type:"component",
+                                componentName: "Binaural",
+                                isClosable: false,
                             },{
                                 type:"component",
                                 componentName: "SpiralControls",
@@ -77,6 +81,10 @@
                         }]
                     }
             var golden_layout = new GoldenLayout(layout_config);
+            golden_layout.registerComponent ('MainControls',
+            function (container, componentState) {
+                container.getElement().append(document.getElementById('main_controls'));
+            })
             golden_layout.registerComponent ('Binaural',
             function (container, componentState) {
                 container.getElement().append(document.getElementById('binaural'));
@@ -97,6 +105,7 @@
             init_binaural_beats()
             resizeCanvas()
         }
+
         </script>
 
         <script>
@@ -104,28 +113,61 @@
                 var canvs    = document.getElementById("glcanvas");
                 var canvsdiv = document.getElementById("spiral");
                 var edge     = window.innerHeight
-                if (window.innerWidth < window.innerHeight) {
+                if (window.innerWidth > window.innerHeight) {
                     edge = window.innerWidth
                 } 
-                // Use only 80% of the screen (for now, add controls later, likely in the golden layout, when we get there.
-                edge = edge * 0.8;
+                edge = edge;
                 console.log(edge)
-                canvs.width     = edge;
-                canvs.height    = edge;
+                canvs.width     = window.innerWidth;
+                canvs.height    = window.innerHeight;
                 // TODO:  Update the transforms to match...
-                canvsdiv.width  = edge;
-                canvsdiv.height = edge;
-                canvsdiv.min_width  = edge;
-                canvsdiv.min_height = edge;
-                canvsdiv.max_width  = edge;
-                canvsdiv.max_height = edge;
+                canvsdiv.width  = window.innerWidth;
+                canvsdiv.height = window.innerHeight;
+                canvsdiv.min_width  = window.innerWidth;
+                canvsdiv.min_height = window.innerHeight;
+                canvsdiv.max_width  = window.innerWidth;
+                canvsdiv.max_height = window.innerHeight;
+            }
+            function full_power() {
+                binaural_beats_play();
+                tts_play();
+                var el = document.getElementById('spiral');
+
+                if(el.webkitRequestFullScreen) {
+                    el.webkitRequestFullScreen();
+                }
+                else {
+                    el.mozRequestFullScreen();
+                }
+                resizeCanvas();
+            }
+            function full_stop() {
+                binaural_beats_stop();
+                tts_stop();
             }
         </script>
     </head>
 
     <body background onload="load()"  onresize="resizeCanvas()">
         <div id="spiralcontrols" class="notepad z-depth-1">
-            WIP    
+            Need to insert controls here.
+        </div>
+        <div id="main_controls" class="notepad z-depth-1">
+            <table id="lessons_table" class="table table-striped table-notebook" width="100%">
+                <thead>
+                    <tr>
+                        <td valign="center">
+                            Make sure settings are set as you like before you press begin.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="center">
+                            <button id="begin_button" type="button" onclick="full_power()" >BEGIN</button>
+                            <button id="begin_button" type="button" onclick="full_stop()" >STOP</button>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
         </div>
 
         <div id="binaural" class="notepad z-depth-1">
@@ -168,8 +210,11 @@
                             <td valign="left" >Voice</td>
                             <td valign="left" >
                                 <select class="tts_voices" id="voiceSelect" name="voiceSelect">
-s                                </select>
+                                </select>
                             </td>
+                        </tr>
+                        <tr>
+                            <td ><input type="number" id="voice_rate" name="voice_rate" value="0.5" min="0" max="2.0" step="0.05" onchange="voice_rate(this)"></td>
                         </tr>
                         <tr>
                             <td valign="left" >Message</td>
