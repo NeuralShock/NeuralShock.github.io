@@ -1,7 +1,9 @@
 var glVariables = {
     numPointsPerSpin: 100,
     numSpins: 9,
-    numPoints: 400
+    numPoints: 400,
+    numSpirals: 2,
+    speed: 0.02
 }
 
 
@@ -64,7 +66,7 @@ function main() {
     const buffers = initBuffers(gl,glVariables);
     let then = 0;
     function render(now) {
-        now *= 0.02;
+        now *= glVariables.speed;
         deltaTime = now - then;
         then = now;
         drawScene(gl, programInfo, buffers, squareRotation, glVariables);

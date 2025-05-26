@@ -47,13 +47,10 @@ function drawScene(gl, programInfo, buffers, squareRotation, vars) {
         modelViewMatrix,
     );
 
-    // Draws a single square
     {
-        const offset = 0;
-
-    
-
-        gl.drawArrays(gl.LINE_STRIP, offset, vars.numPoints);
+        for (var j=0;j<vars.numSpirals;j++) {
+            gl.drawArrays(gl.LINE_STRIP, vars.numPoints*j, vars.numPoints)
+        }
         //const vertexCount = 4;      // This needs to be attached to the triangel strip as a whole.
         //gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
     }
